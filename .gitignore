@@ -1,0 +1,22 @@
+# S32DS 编译输出
+Debug/
+Debug_FLASH/
+Release/
+Debug_RAM/
+
+# 编译临时文件
+*.o
+*.d
+*.map
+*.elf
+*.hex
+*.bin
+*.srec
+
+# 链接脚本生成文件
+*.ld
+
+# 调试器配置
+.settings/
+.cproject
+.project
