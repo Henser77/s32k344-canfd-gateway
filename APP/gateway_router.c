@@ -64,16 +64,21 @@ void Gateway_Process(void)
 
 void Gateway_ProcessPeriodicTasks(void)
 {
-    static uint32_t tick = 0;
+    static uint8_t heartbeat_counter = 0;
 
-    tick++;
-    if (tick >= 5000000)
-    {
-        uint8_t heartbeat_data[8] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+    heartbeat_counter++;
 
-        Can_Send(CAN_CH2_TX, 0x777u, heartbeat_data, 8u, false);
-        tick = 0;
-    }
+    uint8_t heartbeat_data[8];
+    heartbeat_data[0] = heartbeat_counter;
+    heartbeat_data[1] = 0x02u;
+    heartbeat_data[2] = 0x03u;
+    heartbeat_data[3] = 0x04u;
+    heartbeat_data[4] = 0x05u;
+    heartbeat_data[5] = 0x06u;
+    heartbeat_data[6] = 0x07u;
+    heartbeat_data[7] = 0x08u;
+
+    Can_Send(CAN_CH2_TX, 0x777u, heartbeat_data, 8u, false);
 }
 
 
