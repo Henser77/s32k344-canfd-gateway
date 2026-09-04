@@ -9,12 +9,22 @@
 /* 逻辑通道定义（隐藏硬件实例和邮箱） */
 typedef enum
 {
-    CAN_CH0_TX = 0,
-    CAN_CH0_RX,
+    CAN_CH0_TX = 0,   /* CAN0 发送 */
+    CAN_CH0_RX0,      /* CAN0 接收邮箱 0 */
+    CAN_CH0_RX1,      /* CAN0 接收邮箱 1 */
+    CAN_CH0_RX2,      /* CAN0 接收邮箱 2 */
+
     CAN_CH1_TX,
-    CAN_CH1_RX,
+    CAN_CH1_RX0,
+    CAN_CH1_RX1,
+    CAN_CH1_RX2,
+
     CAN_CH2_TX,
-    CAN_CH2_RX,
+    CAN_CH2_RX0,
+    CAN_CH2_RX1,
+    CAN_CH2_RX2,
+    CAN_CH2_RX3,
+
     CAN_CH_MAX
 } CanDrv_ChannelType;
 

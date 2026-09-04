@@ -29,7 +29,7 @@ static const Gateway_RouteEntry gateway_route_table[] =
 {
 		{
 		    /* 诊断仪经典 0x100 → 转 FD 从 CAN0 发出 */
-		    .src_ch = CAN_CH2_RX,
+		    .src_ch = CAN_CH2_RX0,
 		    .src_id = 0x100u,
 		    .action = ROUTE_ACTION_CONVERT_TO_FD,
 		    .dst_ch = CAN_CH0_TX,
@@ -38,7 +38,7 @@ static const Gateway_RouteEntry gateway_route_table[] =
 		},
 		{
 		    /* FD 网段上的 ECU（CAN1）收到 0x100 后，转 经典 从CAN2发出 */
-		    .src_ch = CAN_CH1_RX,
+		    .src_ch = CAN_CH1_RX0,
 		    .src_id = 0x100u,
 		    .action = ROUTE_ACTION_CONVERT_TO_CLASSIC,
 		    .dst_ch = CAN_CH2_TX,

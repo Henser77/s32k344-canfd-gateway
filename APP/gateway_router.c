@@ -3,7 +3,7 @@
 #include "can_pdu.h"
 #include "can_driver.h"
 #include "ring_buffer.h"
-
+#include "uds_diag.h"
 
 
 void Gateway_Init(void)
@@ -25,6 +25,14 @@ void Gateway_Process(void)
 		return;
 	}
 
+	/* 诊断请求拦截 */
+	if(pdu.channel == CAN_CH2_RX1 && pdu.id == UDS_RX_ID)
+	{
+		UDS_Process(&pdu);
+		return;
+	}
+
+	//匹配缓冲区里满足条件的报文
 	for(uint32_t i = 0; i < GATEWAY_ROUTE_COUNT; i++)
 	{
 		entry = &gateway_route_table[i];
@@ -32,6 +40,7 @@ void Gateway_Process(void)
 		if(pdu.channel != entry->src_ch) continue;
 		if(pdu.id != entry->src_id)	continue;
 
+		//根据路由规则转发报文
 		len = entry->data_len;
 		if(len > pdu.length)
 		{

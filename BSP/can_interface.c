@@ -22,12 +22,12 @@ static void CanIf_RxTxCallback(CanDrv_ChannelType channel, CanDrv_EventType even
 
     if (event == CAN_EVENT_RX_COMPLETE)
     {
-    	if (channel == CAN_CH2_RX)
+    	if (channel == CAN_CH2_RX0)
 		{
 			Siul2_Dio_Ip_WritePin(LED_Yellow_PORT, LED_Yellow_PIN, 1);
 		}
 
-    	if(channel == CAN_CH1_RX)
+    	if(channel == CAN_CH1_RX0)
 		{
 			Siul2_Dio_Ip_WritePin(LED_Green_PORT, LED_Green_PIN, 1);
 		}

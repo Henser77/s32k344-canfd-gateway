@@ -11,12 +11,21 @@ typedef struct
 //逻辑通道映射表
 static const CanDrv_ChannelMapEntry channel_map[CAN_CH_MAX] =
 {
-    [CAN_CH0_TX] = { .instance = INST_FLEXCAN_0, .mbIdx = 0, .is_tx = true  },
-    [CAN_CH0_RX] = { .instance = INST_FLEXCAN_0, .mbIdx = 1, .is_tx = false },
-    [CAN_CH1_TX] = { .instance = INST_FLEXCAN_1, .mbIdx = 0, .is_tx = true  },
-    [CAN_CH1_RX] = { .instance = INST_FLEXCAN_1, .mbIdx = 1, .is_tx = false },
-    [CAN_CH2_TX] = { .instance = INST_FLEXCAN_2, .mbIdx = 0, .is_tx = true  },
-    [CAN_CH2_RX] = { .instance = INST_FLEXCAN_2, .mbIdx = 1, .is_tx = false },
+    [CAN_CH0_TX]  = { .instance = INST_FLEXCAN_0, .mbIdx = 0, .is_tx = true  },
+    [CAN_CH0_RX0] = { .instance = INST_FLEXCAN_0, .mbIdx = 1, .is_tx = false },
+    [CAN_CH0_RX1] = { .instance = INST_FLEXCAN_0, .mbIdx = 2, .is_tx = false },
+    [CAN_CH0_RX2] = { .instance = INST_FLEXCAN_0, .mbIdx = 3, .is_tx = false },
+
+    [CAN_CH1_TX]  = { .instance = INST_FLEXCAN_1, .mbIdx = 0, .is_tx = true  },
+    [CAN_CH1_RX0] = { .instance = INST_FLEXCAN_1, .mbIdx = 1, .is_tx = false },
+    [CAN_CH1_RX1] = { .instance = INST_FLEXCAN_1, .mbIdx = 2, .is_tx = false },
+    [CAN_CH1_RX2] = { .instance = INST_FLEXCAN_1, .mbIdx = 3, .is_tx = false },
+
+    [CAN_CH2_TX]  = { .instance = INST_FLEXCAN_2, .mbIdx = 0, .is_tx = true  },
+    [CAN_CH2_RX0] = { .instance = INST_FLEXCAN_2, .mbIdx = 1, .is_tx = false },
+    [CAN_CH2_RX1] = { .instance = INST_FLEXCAN_2, .mbIdx = 2, .is_tx = false },
+    [CAN_CH2_RX2] = { .instance = INST_FLEXCAN_2, .mbIdx = 3, .is_tx = false },
+    [CAN_CH2_RX3] = { .instance = INST_FLEXCAN_2, .mbIdx = 4, .is_tx = false },
 };
 
 static Flexcan_Ip_MsgBuffType rx_buffers[CAN_CH_MAX];  /* 每个通道一个，发送通道不用 */

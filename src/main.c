@@ -17,7 +17,7 @@ extern "C"{
 #include "gateway_router.h"
 #include "gateway_cfg.h"
 
-
+#include "uds_diag.h"
 
 volatile int exit_code = 0;
 /* User includes */
@@ -72,6 +72,12 @@ int main(void)
 						 is_fd);
 	}
 
+	/* 根据 UDS 配置自动配置诊断接收 */
+	Can_StartReceive(UDS_RX_CHANNEL,
+	                 UDS_RX_ID,
+	                 0xFFFFFFFF,
+	                 UDS_RX_DATA_LEN,
+	                 UDS_RX_IS_FD);
 
 	Gateway_Init();
 
