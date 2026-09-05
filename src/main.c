@@ -23,14 +23,18 @@ extern "C"{
 
 #define PIT_INST_0	0U
 #define CH_0	0U
-#define PIT_PERIOD	40000000
+#define PIT_PERIOD	80000000
 
-volatile uint8_t PeriodicTasksFlag;
+volatile bool Periodic_Tasks_Flag = false;
 volatile int exit_code = 0;
 /* User includes */
 void Pit_Callback(uint8 channel)
 {
-	PeriodicTasksFlag = 1;
+	if(channel == CH_0)
+	{
+		Periodic_Tasks_Flag = true;
+	}
+
 }
 
 
@@ -66,32 +70,26 @@ int main(void)
 	 CanIf_Init();
 
 	/* 根据路由表自动配置 BSP 接收 */
-	for (uint32_t i = 0; i < GATEWAY_ROUTE_COUNT; i++)
-	{
-		const Gateway_RouteEntry *entry = &gateway_route_table[i];
+	 for (uint32_t i = 0; i < GATEWAY_ROUTE_COUNT; i++)
+	 {
+	     const Gateway_RouteEntry *entry = &gateway_route_table[i];
 
-		uint8_t data_len = 64u;
-		bool is_fd = true;
+	     CanDrv_ChannelCfgType rx_cfg = CanDrv_GetChannelCfg(entry->src_ch);
 
-		if (entry->action == ROUTE_ACTION_CONVERT_TO_CLASSIC)
-		{
-			data_len = 8u;
-			is_fd = false;
-		}
-
-		Can_StartReceive(entry->src_ch,
-						 entry->src_id,
-						 0xFFFFFFFF,
-						 data_len,
-						 is_fd);
-	}
+	     Can_StartReceive(entry->src_ch,
+	                      entry->src_id,
+	                      0xFFFFFFFF,
+	                      rx_cfg.max_data_len,
+	                      rx_cfg.is_fd);
+	 }
 
 	/* 根据 UDS 配置自动配置诊断接收 */
-	Can_StartReceive(UDS_RX_CHANNEL,
-	                 UDS_RX_ID,
-	                 0xFFFFFFFF,
-	                 UDS_RX_DATA_LEN,
-	                 UDS_RX_IS_FD);
+	 CanDrv_ChannelCfgType uds_rx_cfg = CanDrv_GetChannelCfg(UDS_RX_CHANNEL);
+	 Can_StartReceive(UDS_RX_CHANNEL,
+	                  UDS_RX_ID,
+	                  0xFFFFFFFF,
+	                  uds_rx_cfg.max_data_len,
+	                  uds_rx_cfg.is_fd);
 
 	Gateway_Init();
 
@@ -100,10 +98,10 @@ int main(void)
 
     	Gateway_Process();
 
-    	if(PeriodicTasksFlag)
+    	if(Periodic_Tasks_Flag)
     	{
     		Gateway_ProcessPeriodicTasks();
-    		PeriodicTasksFlag = 0;
+    		Periodic_Tasks_Flag = false;
     	}
 
         if(exit_code != 0)

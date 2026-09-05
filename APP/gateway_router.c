@@ -4,11 +4,11 @@
 #include "can_driver.h"
 #include "ring_buffer.h"
 #include "uds_diag.h"
-
+#include "dtc_manager.h"
 
 void Gateway_Init(void)
 {
-
+    DtcManager_Init();
 }
 
 

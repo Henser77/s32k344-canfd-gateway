@@ -28,6 +28,25 @@ static const CanDrv_ChannelMapEntry channel_map[CAN_CH_MAX] =
     [CAN_CH2_RX3] = { .instance = INST_FLEXCAN_2, .mbIdx = 4, .is_tx = false },
 };
 
+static const CanDrv_ChannelCfgType channel_cfg_table[CAN_CH_MAX] =
+{
+    [CAN_CH0_TX]  = { .is_fd = true,  .max_data_len = 64u },
+    [CAN_CH0_RX0] = { .is_fd = true,  .max_data_len = 64u },
+    [CAN_CH0_RX1] = { .is_fd = true,  .max_data_len = 64u },
+    [CAN_CH0_RX2] = { .is_fd = true,  .max_data_len = 64u },
+
+    [CAN_CH1_TX]  = { .is_fd = true,  .max_data_len = 64u },
+    [CAN_CH1_RX0] = { .is_fd = true,  .max_data_len = 64u },
+    [CAN_CH1_RX1] = { .is_fd = true,  .max_data_len = 64u },
+    [CAN_CH1_RX2] = { .is_fd = true,  .max_data_len = 64u },
+
+    [CAN_CH2_TX]  = { .is_fd = false, .max_data_len = 8u  },
+    [CAN_CH2_RX0] = { .is_fd = false, .max_data_len = 8u  },
+    [CAN_CH2_RX1] = { .is_fd = false, .max_data_len = 8u  },
+    [CAN_CH2_RX2] = { .is_fd = false, .max_data_len = 8u  },
+    [CAN_CH2_RX3] = { .is_fd = false, .max_data_len = 8u  },
+};
+
 static Flexcan_Ip_MsgBuffType rx_buffers[CAN_CH_MAX];  /* 每个通道一个，发送通道不用 */
 
 static CanDrv_Callback user_callback = NULL;
@@ -74,6 +93,23 @@ CanDrv_StatusType Can_Deinit(void)
 
 	is_init = false;
 	return CAN_DRV_OK;
+}
+
+CanDrv_ChannelCfgType CanDrv_GetChannelCfg(CanDrv_ChannelType channel)
+{
+    CanDrv_ChannelCfgType cfg;
+
+    if (channel < CAN_CH_MAX)
+    {
+        cfg = channel_cfg_table[channel];
+    }
+    else
+    {
+        cfg.is_fd = false;
+        cfg.max_data_len = 8u;
+    }
+
+    return cfg;
 }
 
 CanDrv_StatusType Can_Send(CanDrv_ChannelType channel, uint32_t msgId,

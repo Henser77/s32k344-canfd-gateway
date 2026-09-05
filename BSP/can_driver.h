@@ -28,6 +28,12 @@ typedef enum
     CAN_CH_MAX
 } CanDrv_ChannelType;
 
+typedef struct
+{
+    bool    is_fd;          /* true: CAN FD 网段; false: 经典 CAN 网段 */
+    uint8_t max_data_len;   /* 该通道最大数据长度 */
+} CanDrv_ChannelCfgType;
+
 /* BSP 事件类型 */
 typedef enum
 {
@@ -68,5 +74,7 @@ CanDrv_StatusType Can_ReadReceivedData(CanDrv_ChannelType channel,
                                        uint32_t *msgId, uint8_t *data,
                                        uint8_t *length, bool *is_fd,
 									   bool *is_std, bool *is_remote);
+CanDrv_ChannelCfgType CanDrv_GetChannelCfg(CanDrv_ChannelType channel);
+
 
 #endif
