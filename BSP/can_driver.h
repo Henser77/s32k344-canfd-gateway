@@ -57,17 +57,25 @@ typedef enum
 	CAN_DRV_ERR_RESTART_RECEIVE_FAILED
 }CanDrv_StatusType;
 
-
+typedef enum
+{
+    CAN_DRV_ERR_EVENT_BUSOFF = 0,
+    CAN_DRV_ERR_EVENT_ERROR_PASSIVE,
+    CAN_DRV_ERR_EVENT_UNKNOWN
+} CanDrv_ErrorEventType;
 
 //定义了一个叫CanDrv_Callback的函数指针类型
 typedef void (*CanDrv_Callback)(CanDrv_ChannelType channel, CanDrv_EventType event);
 
+/* 错误回调函数指针类型 */
+typedef void (*CanDrv_ErrorCallback)(CanDrv_ChannelType channel, CanDrv_ErrorEventType event);
 
 CanDrv_StatusType Can_Init(void);
 CanDrv_StatusType Can_Deinit(void);
 CanDrv_StatusType Can_Send(CanDrv_ChannelType channel, uint32_t msgId,
                            const uint8_t *data, uint8_t length, bool is_fd);
 CanDrv_StatusType Can_RegisterCallback(CanDrv_Callback callback);
+CanDrv_StatusType Can_RegisterErrorCallback(CanDrv_ErrorCallback callback);
 CanDrv_StatusType Can_StartReceive(CanDrv_ChannelType channel, uint32_t msgId,
 		uint32_t msgIdMask, uint8_t dataLength, bool is_fd);
 CanDrv_StatusType Can_ReadReceivedData(CanDrv_ChannelType channel,

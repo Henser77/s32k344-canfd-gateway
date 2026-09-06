@@ -1,4 +1,5 @@
 #include "ring_buffer.h"
+#include "error_tracker.h"
 #include "string.h"
 
 static Can_Pdu_t buffer[RING_BUFFER_SIZE] ;
@@ -30,6 +31,7 @@ bool RingBuf_Write(const Can_Pdu_t *pdu)
 	 /* 如果缓冲区已满，丢弃新数据 */
 	 if (count >= RING_BUFFER_SIZE)
 	 {
+		 ErrTracker_Report(ERR_RINGBUF_OVERFLOW);
 		 return false;
 	 }
 

@@ -79,6 +79,9 @@ extern void CAN0_ORED_0_31_MB_IRQHandler(void);
 extern void CAN1_ORED_0_31_MB_IRQHandler(void);
 extern void CAN2_ORED_0_31_MB_IRQHandler(void);
 extern void PIT_0_ISR(void);
+extern void CAN0_ORED_IRQHandler(void);
+extern void CAN1_ORED_IRQHandler(void);
+extern void CAN2_ORED_IRQHandler(void);
 #define PLATFORM_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Platform_MemMap.h"
 

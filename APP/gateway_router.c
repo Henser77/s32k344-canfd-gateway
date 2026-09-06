@@ -3,6 +3,7 @@
 #include "can_pdu.h"
 #include "can_driver.h"
 #include "ring_buffer.h"
+#include "error_tracker.h"
 #include "uds_diag.h"
 #include "dtc_manager.h"
 
@@ -20,6 +21,9 @@ void Gateway_Process(void)
 	bool is_fd;
 	const Gateway_RouteEntry *entry;
 
+	bool matched = false;
+
+	//读取缓冲区报文
 	if(!RingBuf_Read(&pdu))
 	{
 		return;
@@ -32,13 +36,16 @@ void Gateway_Process(void)
 		return;
 	}
 
-	//匹配缓冲区里满足条件的报文
+	//匹配缓冲区里满足路由条件的报文
 	for(uint32_t i = 0; i < GATEWAY_ROUTE_COUNT; i++)
 	{
 		entry = &gateway_route_table[i];
 
 		if(pdu.channel != entry->src_ch) continue;
 		if(pdu.id != entry->src_id)	continue;
+
+		//匹配到路由，即matched
+		matched = true;
 
 		//根据路由规则转发报文
 		len = entry->data_len;
@@ -59,11 +66,31 @@ void Gateway_Process(void)
 
 		Can_Send(entry->dst_ch, entry->dst_id, data, len, is_fd);
 	}
+
+	//遍历全部路由表后没有匹配，上报错误
+	if(!matched)
+	{
+		ErrTracker_Report(ERR_ROUTE_NO_MATCH);
+	}
 }
 
 
 void Gateway_ProcessPeriodicTasks(void)
 {
+	/* 错误与 DTC 联动 */
+	if (ErrTracker_GetCount(ERR_CAN0_BUS_OFF) > 0u)
+	{
+		DtcManager_Set(0x015001u, DTC_STATUS_ACTIVE);
+	}
+	if (ErrTracker_GetCount(ERR_CAN1_BUS_OFF) > 0u)
+	{
+		DtcManager_Set(0x015002u, DTC_STATUS_ACTIVE);
+	}
+	if (ErrTracker_GetCount(ERR_CAN2_BUS_OFF) > 0u)
+	{
+		DtcManager_Set(0x015003u, DTC_STATUS_ACTIVE);
+	}
+
     static uint8_t heartbeat_counter = 0;
 
     heartbeat_counter++;

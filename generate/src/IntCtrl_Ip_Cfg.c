@@ -72,10 +72,13 @@ static const IntCtrl_Ip_IrqConfigType aIrqConfiguration1[] = {
     {FlexCAN1_1_IRQn, (boolean)TRUE, 0U, &CAN1_ORED_0_31_MB_IRQHandler},
     {FlexCAN2_1_IRQn, (boolean)TRUE, 0U, &CAN2_ORED_0_31_MB_IRQHandler},
     {PIT0_IRQn, (boolean)TRUE, 0U, &PIT_0_ISR},
+    {FlexCAN0_0_IRQn, (boolean)TRUE, 0U, &CAN0_ORED_IRQHandler},
+    {FlexCAN1_0_IRQn, (boolean)TRUE, 0U, &CAN1_ORED_IRQHandler},
+    {FlexCAN2_0_IRQn, (boolean)TRUE, 0U, &CAN2_ORED_IRQHandler},
 };
 /* Configuration structure for interrupt controller #1*/
 const IntCtrl_Ip_CtrlConfigType IntCtrlConfig_0 = {
-    4U,
+    7U,
     aIrqConfiguration1
 };
 #define PLATFORM_STOP_SEC_CONFIG_DATA_UNSPECIFIED

@@ -97,10 +97,19 @@ extern "C"{
 
 extern void FlexCAN0_Callback(uint8 instance, Flexcan_Ip_EventType eventType,
                 uint32 buffIdx, const Flexcan_Ip_StateType * flexcanState);
+extern void FlexCAN0_ErrCallback(uint8 instance, Flexcan_Ip_EventType eventType,
+                                            uint32 u32ErrStatus,
+                                            const Flexcan_Ip_StateType * flexcanState);
 extern void FlexCAN1_Callback(uint8 instance, Flexcan_Ip_EventType eventType,
                 uint32 buffIdx, const Flexcan_Ip_StateType * flexcanState);
+extern void FlexCAN1_ErrCallback(uint8 instance, Flexcan_Ip_EventType eventType,
+                                            uint32 u32ErrStatus,
+                                            const Flexcan_Ip_StateType * flexcanState);
 extern void FlexCAN2_Callback(uint8 instance, Flexcan_Ip_EventType eventType,
                 uint32 buffIdx, const Flexcan_Ip_StateType * flexcanState);
+extern void FlexCAN2_ErrCallback(uint8 instance, Flexcan_Ip_EventType eventType,
+                                            uint32 u32ErrStatus,
+                                            const Flexcan_Ip_StateType * flexcanState);
 #define CAN_43_FLEXCAN_STOP_SEC_CODE
 #include "Can_43_FLEXCAN_MemMap.h"
 /*==================================================================================================
@@ -214,7 +223,7 @@ const Flexcan_Ip_ConfigType FlexCAN_Config0  = {
     /* Controller Callback */
     &FlexCAN0_Callback,
     /* Error Callback */
-    NULL_PTR
+    &FlexCAN0_ErrCallback
     };
     const Flexcan_Ip_ConfigType FlexCAN_Config1  = {
     /* Number Of Message Buffer used .max_num_mb  */
@@ -305,7 +314,7 @@ const Flexcan_Ip_ConfigType FlexCAN_Config0  = {
     /* Controller Callback */
     &FlexCAN1_Callback,
     /* Error Callback */
-    NULL_PTR
+    &FlexCAN1_ErrCallback
     };
     const Flexcan_Ip_ConfigType FlexCAN_Config2  = {
     /* Number Of Message Buffer used .max_num_mb  */
@@ -396,7 +405,7 @@ const Flexcan_Ip_ConfigType FlexCAN_Config0  = {
     /* Controller Callback */
     &FlexCAN2_Callback,
     /* Error Callback */
-    NULL_PTR
+    &FlexCAN2_ErrCallback
     };
     
 #define CAN_43_FLEXCAN_STOP_SEC_CONFIG_DATA_UNSPECIFIED

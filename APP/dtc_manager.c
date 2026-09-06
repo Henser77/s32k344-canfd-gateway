@@ -33,3 +33,26 @@ void DtcManager_ClearAll(void)
     dtc_count = 0;
 }
 
+void DtcManager_Set(uint32_t dtc_code, uint8_t status)
+{
+    /* 先检查这个 DTC 是否已经存在 */
+    for (uint32_t i = 0; i < dtc_count; i++)
+    {
+        if (dtc_list[i].dtc_code == dtc_code)
+        {
+            /* 已存在，只更新状态 */
+            dtc_list[i].status = status;
+            return;
+        }
+    }
+
+    /* 不存在则追加一条新记录 */
+    if (dtc_count >= DTC_MAX_COUNT)
+    {
+        return;
+    }
+
+    dtc_list[dtc_count].dtc_code = dtc_code;
+    dtc_list[dtc_count].status   = status;
+    dtc_count++;
+}

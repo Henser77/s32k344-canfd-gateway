@@ -2,6 +2,7 @@
 #include "can_driver.h"
 #include "can_pdu.h"
 #include "ring_buffer.h"
+#include "error_tracker.h"
 #include "Siul2_Port_Ip.h"
 #include "Siul2_Dio_Ip.h"
 
@@ -15,10 +16,7 @@ static void CanIf_RxTxCallback(CanDrv_ChannelType channel, CanDrv_EventType even
 		{
 			Siul2_Dio_Ip_WritePin(LED_Red_PORT, LED_Red_PIN, 1);
 		}
-
-
 	}
-
 
     if (event == CAN_EVENT_RX_COMPLETE)
     {
@@ -51,8 +49,29 @@ static void CanIf_RxTxCallback(CanDrv_ChannelType channel, CanDrv_EventType even
 
 }
 
+/* 错误回调，把 BSP 错误翻译成错误计数 */
+static void CanIf_ErrorHandler(CanDrv_ChannelType channel, CanDrv_ErrorEventType event)
+{
+	if (event == CAN_DRV_ERR_EVENT_BUSOFF)
+    {
+        if (channel == CAN_CH0_TX)
+        {
+            ErrTracker_Report(ERR_CAN0_BUS_OFF);
+        }
+        else if (channel == CAN_CH1_TX)
+        {
+            ErrTracker_Report(ERR_CAN1_BUS_OFF);
+        }
+        else if (channel == CAN_CH2_TX)
+        {
+            ErrTracker_Report(ERR_CAN2_BUS_OFF);
+        }
+    }
+}
+
 void CanIf_Init(void)
 {
-    /* 把回调函数注册给 BSP 层 */
+    /* 把回调函数注册给 上 层 */
     Can_RegisterCallback(CanIf_RxTxCallback);
+    Can_RegisterErrorCallback(CanIf_ErrorHandler);
 }

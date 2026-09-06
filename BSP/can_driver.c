@@ -50,6 +50,7 @@ static const CanDrv_ChannelCfgType channel_cfg_table[CAN_CH_MAX] =
 static Flexcan_Ip_MsgBuffType rx_buffers[CAN_CH_MAX];  /* 每个通道一个，发送通道不用 */
 
 static CanDrv_Callback user_callback = NULL;
+static CanDrv_ErrorCallback user_error_callback = NULL;
 
 static bool is_init = false;
 
@@ -245,6 +246,12 @@ CanDrv_StatusType Can_RegisterCallback(CanDrv_Callback callback)
     return CAN_DRV_OK;
 }
 
+CanDrv_StatusType Can_RegisterErrorCallback(CanDrv_ErrorCallback callback)
+{
+    user_error_callback = callback;
+    return CAN_DRV_OK;
+}
+
 static void CanDrv_RtdCallbackHandler(uint8_t instance, Flexcan_Ip_EventType eventType,
                                       uint32_t buffIdx)
 {
@@ -291,4 +298,51 @@ void FlexCAN2_Callback(uint8_t instance, Flexcan_Ip_EventType eventType,
 {
     CanDrv_RtdCallbackHandler(instance, eventType, buffIdx);
 }
+
+void FlexCAN0_ErrCallback(uint8 instance, Flexcan_Ip_EventType eventType,
+                          uint32 u32ErrStatus,
+                          const Flexcan_Ip_StateType * flexcanState)
+{
+    if (user_error_callback != NULL)
+    {
+        if (eventType == FLEXCAN_EVENT_BUSOFF)
+        {
+            user_error_callback(CAN_CH0_TX, CAN_DRV_ERR_EVENT_BUSOFF);
+        }
+    }
+}
+
+void FlexCAN1_ErrCallback(uint8 instance, Flexcan_Ip_EventType eventType,
+                                            uint32 u32ErrStatus,
+                                            const Flexcan_Ip_StateType * flexcanState)
+{
+	if (user_error_callback != NULL)
+	    {
+	        if (eventType == FLEXCAN_EVENT_BUSOFF)
+	        {
+	            user_error_callback(CAN_CH1_TX, CAN_DRV_ERR_EVENT_BUSOFF);
+	        }
+	    }
+}
+
+void FlexCAN2_ErrCallback(uint8 instance, Flexcan_Ip_EventType eventType,
+                                            uint32 u32ErrStatus,
+                                            const Flexcan_Ip_StateType * flexcanState)
+{
+	if (user_error_callback != NULL)
+	    {
+	        if (eventType == FLEXCAN_EVENT_BUSOFF)
+	        {
+	            user_error_callback(CAN_CH2_TX, CAN_DRV_ERR_EVENT_BUSOFF);
+	        }
+	    }
+}
+
+
+
+
+
+
+
+
 

@@ -7,6 +7,10 @@
 
 #define DTC_MAX_COUNT	16U
 
+#define DTC_STATUS_ACTIVE   0x01u
+#define DTC_STATUS_INACTIVE 0x02u
+
+
 typedef struct
 {
 	uint32_t dtc_code;	/* DTC 编号，如 0x015001 */
@@ -17,7 +21,6 @@ void DtcManager_Init(void);
 uint32_t DtcManager_GetCount(void);
 const DtcRecord_t *DtcManager_GetRecord(uint32_t index);
 void DtcManager_ClearAll(void);
-
-
+void DtcManager_Set(uint32_t dtc_code, uint8_t status);
 
 #endif

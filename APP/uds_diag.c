@@ -1,5 +1,6 @@
 #include "uds_diag.h"
 #include "dtc_manager.h"
+#include "error_tracker.h"
 #include "can_driver.h"
 #include <stddef.h>
 
@@ -116,6 +117,7 @@ void UDS_Process(const Can_Pdu_t *rx_pdu)
 
         default:
         {
+        	ErrTracker_Report(ERR_UDS_UNKNOWN_SERVICE);
             resp_data[0] = 0x03u;
             resp_data[1] = UDS_NEG_RESPONSE_SID;
             resp_data[2] = sid;
