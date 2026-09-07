@@ -233,7 +233,7 @@ IDE：S32 Design Studio
 
 SDK：NXP S32K3 RTD
 
-工具：周立功 USB-CAN 分析仪
+工具： USB-CAN 分析仪
 
 版本管理：Git
 
@@ -246,8 +246,6 @@ Middleware/          中间件：环形缓冲、错误跟踪、PDU
 src/                 主函数
 RTD/                 官方驱动
 generate/            工具生成代码
-这个 README 可以直接放进你的 Git 仓库里。
-如果你觉得某些部分措辞需要调整，或者想加截图、架构图，我们可以在下一轮里继续改。
 
 
 
