@@ -4,7 +4,7 @@
 #include "can_driver.h"
 #include <stddef.h>
 
-/* 诊断服务 ID */
+/* 诊断服务 SID */
 #define UDS_SID_SESSION_CONTROL       0x10u   /* 会话控制 */
 #define UDS_SID_READ_DATA_BY_ID       0x22u   /* 读数据 */
 #define UDS_SID_TESTER_PRESENT        0x3Eu   /* 握手 */

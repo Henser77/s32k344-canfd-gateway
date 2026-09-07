@@ -7,7 +7,7 @@
 #include "Siul2_Dio_Ip.h"
 
 
-/* 注册给 BSP 层的回调函数 */
+/* 注册给 上 层的回调函数 */
 static void CanIf_RxTxCallback(CanDrv_ChannelType channel, CanDrv_EventType event)
 {
 	if (event == CAN_EVENT_TX_COMPLETE)

@@ -30,7 +30,7 @@ void Gateway_Process(void)
 	}
 
 	/* 诊断请求拦截 */
-	if(pdu.channel == CAN_CH2_RX1 && pdu.id == UDS_RX_ID)
+	if(pdu.channel == CAN_CH2_RX1 && pdu.id == UDS_RX_ID)	//来自诊断报文接收通道且ID匹配
 	{
 		UDS_Process(&pdu);
 		return;

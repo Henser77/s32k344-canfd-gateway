@@ -28,6 +28,7 @@ static const CanDrv_ChannelMapEntry channel_map[CAN_CH_MAX] =
     [CAN_CH2_RX3] = { .instance = INST_FLEXCAN_2, .mbIdx = 4, .is_tx = false },
 };
 
+//逻辑通道配置表
 static const CanDrv_ChannelCfgType channel_cfg_table[CAN_CH_MAX] =
 {
     [CAN_CH0_TX]  = { .is_fd = true,  .max_data_len = 64u },
@@ -47,7 +48,7 @@ static const CanDrv_ChannelCfgType channel_cfg_table[CAN_CH_MAX] =
     [CAN_CH2_RX3] = { .is_fd = false, .max_data_len = 8u  },
 };
 
-static Flexcan_Ip_MsgBuffType rx_buffers[CAN_CH_MAX];  /* 每个通道一个，发送通道不用 */
+static Flexcan_Ip_MsgBuffType rx_buffers[CAN_CH_MAX];  /* 每个接收通道一个，发送通道不用 */
 
 static CanDrv_Callback user_callback = NULL;
 static CanDrv_ErrorCallback user_error_callback = NULL;
@@ -102,10 +103,11 @@ CanDrv_ChannelCfgType CanDrv_GetChannelCfg(CanDrv_ChannelType channel)
 
     if (channel < CAN_CH_MAX)
     {
-        cfg = channel_cfg_table[channel];
+        cfg = channel_cfg_table[channel]; //读取对应逻辑通道的配置
     }
     else
     {
+    	//不在默认范围的逻辑通道配置成安全值
         cfg.is_fd = false;
         cfg.max_data_len = 8u;
     }
@@ -118,6 +120,7 @@ CanDrv_StatusType Can_Send(CanDrv_ChannelType channel, uint32_t msgId,
 {
 	Flexcan_Ip_StatusType flexcan_status;
 
+	//检查参数
 	if (!is_init)return CAN_DRV_ERR_NOT_INIT;
 	if (channel >= CAN_CH_MAX)return CAN_DRV_ERR_PARAM;
 	if (data == NULL) return CAN_DRV_ERR_PARAM;
@@ -154,6 +157,7 @@ CanDrv_StatusType Can_StartReceive(CanDrv_ChannelType channel, uint32_t msgId,
 {
 	Flexcan_Ip_StatusType flexcan_status;
 
+	//检查参数
 	if (!is_init)return CAN_DRV_ERR_NOT_INIT;
 	if (channel >= CAN_CH_MAX)return CAN_DRV_ERR_PARAM;
 	if ((!is_fd && dataLength > 8) || (is_fd && dataLength > 64))return CAN_DRV_ERR_PARAM;
@@ -187,6 +191,7 @@ CanDrv_StatusType Can_ReadReceivedData(CanDrv_ChannelType channel,
                                        uint8_t *length, bool *is_fd,
 									   bool *is_std, bool *is_remote)
 {
+	//检查参数
     if (!is_init) return CAN_DRV_ERR_NOT_INIT;
     if (channel >= CAN_CH_MAX) return CAN_DRV_ERR_PARAM;
     if (msgId == NULL || data == NULL || length == NULL ||
@@ -195,9 +200,8 @@ CanDrv_StatusType Can_ReadReceivedData(CanDrv_ChannelType channel,
         return CAN_DRV_ERR_PARAM;
     }
 
-
     const CanDrv_ChannelMapEntry *entry = &channel_map[channel];
-    if (entry->is_tx) return CAN_DRV_ERR_PARAM;
+    if (entry->is_tx) return CAN_DRV_ERR_PARAM;		/* 不是接收通道 */
 
     Flexcan_Ip_MsgBuffType *rx_buffer = &rx_buffers[channel];
     uint32_t cs = rx_buffer->cs;

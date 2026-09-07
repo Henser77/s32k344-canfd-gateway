@@ -52,6 +52,7 @@ void DtcManager_Set(uint32_t dtc_code, uint8_t status)
         return;
     }
 
+    //添加DTC
     dtc_list[dtc_count].dtc_code = dtc_code;
     dtc_list[dtc_count].status   = status;
     dtc_count++;
